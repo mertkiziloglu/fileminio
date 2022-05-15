@@ -23,11 +23,7 @@ import static java.nio.file.Paths.get;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
-/**
- * @author Roland Junior Toussaint
- * @version 1.0
- * @since 4/9/2021
- */
+
 
 @RestController
 @RequestMapping("/file")
