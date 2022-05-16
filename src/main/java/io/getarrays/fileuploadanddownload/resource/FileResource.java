@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 public class FileResource {
 
     // define a location
-    public static final String DIRECTORY = System.getProperty("user.home") + "/Downloads/uploads/";
+    public static final String DIRECTORY = System.getProperty("user.home") + "/Downloads";
 
     // Define a method to upload files
     @PostMapping("/upload")
@@ -43,7 +44,7 @@ public class FileResource {
                 if(fileStorage.toFile().exists()) {
                     Files.delete(fileStorage);
                 }
-                Files.copy(file.getInputStream(), fileStorage, REPLACE_EXISTING);
+                Files.copy(file.getInputStream(), fileStorage,StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
                 throw new IOException("Could not store file " + filename + " on the server");
             }
