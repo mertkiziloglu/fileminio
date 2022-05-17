@@ -10,8 +10,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,6 +23,7 @@ import java.util.List;
 
 import static java.nio.file.Files.copy;
 import static java.nio.file.Paths.get;
+import static java.nio.file.StandardCopyOption.COPY_ATTRIBUTES;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 
@@ -31,7 +34,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
 public class FileResource {
 
     // define a location
-    public static final String DIRECTORY = System.getProperty("user.home") + "/Downloads";
+    public static final String DIRECTORY = System.getProperty("user.home") + "/Desktop/";
 
     // Define a method to upload files
     @PostMapping("/upload")
@@ -40,13 +43,12 @@ public class FileResource {
         for(MultipartFile file : multipartFiles) {
             String filename = StringUtils.cleanPath(file.getOriginalFilename());
             Path fileStorage = get(DIRECTORY, filename).toAbsolutePath().normalize();
+            InputStream inputStream = file.getInputStream();
             try {
-                if(fileStorage.toFile().exists()) {
-                    Files.delete(fileStorage);
-                }
-                Files.copy(file.getInputStream(), fileStorage,StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                throw new IOException("Could not store file " + filename + " on the server");
+                Files.copy(inputStream, fileStorage, REPLACE_EXISTING);
+                inputStream.close();
+            }catch (IOException e) {
+                throw new IOException("Could not store file " + filename + ". Please try again!", e);
             }
             filenames.add(filename);
         }
