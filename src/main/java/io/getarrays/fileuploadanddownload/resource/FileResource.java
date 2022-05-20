@@ -38,7 +38,7 @@ public class FileResource {
 
     // Define a method to upload files
     @PostMapping("/upload")
-    public ResponseEntity<List<String>> uploadFiles(@RequestParam("files")List<MultipartFile> multipartFiles) throws IOException {
+    public ResponseEntity<List<String>> uploadFiles(@RequestParam("files")List<MultipartFile> multipartFiles) throws IOException { //request name is files and you should chosen file
         List<String> filenames = new ArrayList<>();
         for(MultipartFile file : multipartFiles) {
             String filename = StringUtils.cleanPath(file.getOriginalFilename());
